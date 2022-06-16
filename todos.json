@@ -1,0 +1,24 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Сделать тестовое для MindBox",
+      "status": "todo"
+    },
+    {
+      "id": 2,
+      "title": "Сделать тестовое для JetStyle",
+      "status": "done"
+    },
+    {
+      "id": 1655413541389,
+      "title": "Задача",
+      "status": "todo"
+    },
+    {
+      "id": 1655413556689,
+      "title": "Ещё одна задача",
+      "status": "todo"
+    }
+  ]
+}

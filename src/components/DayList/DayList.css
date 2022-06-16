@@ -1,0 +1,54 @@
+.DayList {
+  width: 30%;
+}
+.DayList__header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+.DayList__date,
+.DayList__weekday {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 8px;
+}
+.DayList__list {
+  padding: 0;
+}
+.DayList__listItem {
+  box-sizing: border-box;
+  list-style-type: none;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #bebebe;
+  display: flex;
+  justify-content: space-between;
+}
+.DayList__listItem:hover {
+  border-bottom-color: #6514b4;
+}
+.DayList__listItem_done {
+  text-decoration: line-through;
+  color: gray;
+}
+.DayList__listItem_done .DayList__done path {
+  fill: gray;
+}
+.DayList__done:hover {
+  cursor: pointer;
+}
+.DayList__listItem_blank {
+  border: none;
+  border-bottom: 1px solid #bebebe;
+  font-size: 16px;
+}
+.DayList__listItem_blank::placeholder {
+  color: #cfcfcf;
+  font-size: 16px;
+}
+.DayList__listItem:focus-visible {
+  outline: none;
+  box-shadow: 0 0 5px 1px #6514b4;
+  border-radius: 2px;
+}
