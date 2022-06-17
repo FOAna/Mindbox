@@ -1,5 +1,10 @@
 .DayList {
-  width: 30%;
+  width: 500px;
+  padding: 12px 20px 32px;
+  border: solid black;
+  border-width: 3px 4px 3px 5px;
+  border-radius: 95% 4% 92% 5%/4% 95% 6% 95%;
+  transform: rotate(2deg);
 }
 .DayList__header {
   display: flex;
@@ -19,36 +24,68 @@
   box-sizing: border-box;
   list-style-type: none;
   width: 100%;
-  padding: 8px;
   margin-bottom: 4px;
   border-bottom: 1px solid #bebebe;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding-right: 8px;
 }
 .DayList__listItem:hover {
   border-bottom-color: #6514b4;
 }
-.DayList__listItem_done {
+.DayList__listItem input {
+  padding: 8px;
+  border: none;
+  font-size: 16px;
+  width: 80%;
+}
+.DayList__listItem input:focus-visible {
+  outline: none;
+  box-shadow: 0 6px 4px -4px #6514b4;
+  border-radius: 2px;
+}
+.DayList__listItem input::placeholder {
+  color: #000000;
+  font-size: 16px;
+}
+.DayList__listItem_done input::placeholder {
   text-decoration: line-through;
   color: gray;
+}
+.DayList__listItem_blank input::placeholder {
+  color: #cfcfcf;
 }
 .DayList__listItem_done .DayList__done path {
   fill: gray;
 }
-.DayList__done:hover {
+.DayList__done:hover,
+.DayList__delete:hover {
   cursor: pointer;
 }
-.DayList__listItem_blank {
-  border: none;
-  border-bottom: 1px solid #bebebe;
-  font-size: 16px;
+.DayList__delete {
+  margin-left: 8px;
 }
-.DayList__listItem_blank::placeholder {
-  color: #cfcfcf;
-  font-size: 16px;
+.DayList__filterRadio {
+  display: inline-block;
+  margin-right: 10px;
 }
-.DayList__listItem:focus-visible {
-  outline: none;
-  box-shadow: 0 0 5px 1px #6514b4;
-  border-radius: 2px;
+.DayList__filterRadio input[type='radio'] {
+  display: none;
+}
+.DayList__filterRadio label {
+  display: inline-block;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid gray;
+  border-radius: 6px;
+  user-select: none;
+}
+.DayList__filterRadio input[type='radio']:checked + label {
+  border-color: #6514b4;
+  box-shadow: 0 0 4px #6514b4;
+}
+.DayList__filterRadio label:hover {
+  border-color: #6514b4;
 }
