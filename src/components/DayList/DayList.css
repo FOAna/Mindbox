@@ -89,3 +89,18 @@
 .DayList__filterRadio label:hover {
   border-color: #6514b4;
 }
+.DayList__deleteDone {
+  border: 1px solid gray;
+  border-radius: 50%;
+}
+.DayList__deleteDone:hover {
+  border-color: #6514b4;
+  box-shadow: 0 0 4px #6514b4;
+  cursor: pointer;
+}
+.DayList__footer {
+  margin-top: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
