@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useCallback } from 'react';
 import { useState, useEffect } from 'react';
 import delIcon from '../../images/delete.svg';
 import delDone from '../../images/deleteDone.svg';
@@ -22,6 +23,42 @@ export default function DayList() {
   const [filter, setFilter] = useState('all');
   const [isDataChanged, setIsDataChanged] = useState(false);
 
+  const onBlurChange = useCallback(
+    (event, item) => {
+      if (event.target.value.length && event.target.value !== item.title) {
+        axios
+          .put(`${url}${item.id}`, {
+            id: item.id,
+            title: event.target.value,
+            status: item.status,
+          })
+          .then(setIsDataChanged(!isDataChanged));
+      }
+      event.target.value = '';
+    },
+    [isDataChanged]
+  );
+
+  const onClickDone = useCallback(
+    (item) => {
+      axios
+        .put(`${url}${item.id}`, {
+          id: item.id,
+          title: item.title,
+          status: item.status === 'todo' ? 'done' : 'todo',
+        })
+        .then(setIsDataChanged(!isDataChanged));
+    },
+    [isDataChanged]
+  );
+
+  const onClickDelete = useCallback(
+    (item) => {
+      axios.delete(`${url}${item.id}`).then(setIsDataChanged(!isDataChanged));
+    },
+    [isDataChanged]
+  );
+
   useEffect(() => {
     axios.get(url).then((response) => {
       setTodo(
@@ -43,34 +80,12 @@ export default function DayList() {
                       event.target.blur();
                     }
                   }}
-                  onBlur={(event) => {
-                    if (
-                      event.target.value.length &&
-                      event.target.value !== item.title
-                    ) {
-                      axios
-                        .put(`${url}${item.id}`, {
-                          id: item.id,
-                          title: event.target.value,
-                          status: item.status,
-                        })
-                        .then(setIsDataChanged(!isDataChanged));
-                    }
-                    event.target.value = '';
-                  }}
+                  onBlur={(event) => onBlurChange(event, item)}
                 />
                 <div className='DayList__itemButtons'>
                   <svg
                     className='DayList__done'
-                    onClick={(event) => {
-                      axios
-                        .put(`${url}${item.id}`, {
-                          id: item.id,
-                          title: item.title,
-                          status: item.status === 'todo' ? 'done' : 'todo',
-                        })
-                        .then(setIsDataChanged(!isDataChanged));
-                    }}
+                    onClick={() => onClickDone(item)}
                     width='20'
                     height='20'
                     viewBox='0 0 200 200'
@@ -101,11 +116,7 @@ export default function DayList() {
                   <img
                     className='DayList__delete'
                     src={delIcon}
-                    onClick={(event) => {
-                      axios
-                        .delete(`${url}${item.id}`)
-                        .then(setIsDataChanged(!isDataChanged));
-                    }}
+                    onClick={() => onClickDelete(item)}
                     alt='Удалить'
                     width='19px'
                     height='20px'
@@ -116,7 +127,15 @@ export default function DayList() {
           })
       );
     });
-  }, [setTodo, setIsDataChanged, isDataChanged, filter]);
+  }, [
+    setTodo,
+    setIsDataChanged,
+    isDataChanged,
+    filter,
+    onBlurChange,
+    onClickDone,
+    onClickDelete,
+  ]);
 
   return (
     <div className='DayList'>
@@ -203,17 +222,15 @@ export default function DayList() {
           height='20px'
           alt='Удалить все завершённые'
           title='Удалить все завершённые дела'
-          onClick={(event) => {
-            axios
-              .get(url)
-              .then((response) => {
-                response.data
-                  .filter((item) => item.status === 'done')
-                  .forEach((element) => {
-                    axios.delete(`${url}${element.id}`);
-                  });
-              })
-              .then(setIsDataChanged(!isDataChanged));
+          onClick={() => {
+            axios.get(url).then((response) => {
+              response.data
+                .filter((item) => item.status === 'done')
+                .forEach((element) => {
+                  axios.delete(`${url}${element.id}`);
+                });
+              setIsDataChanged(!isDataChanged);
+            });
           }}
         />
       </div>
