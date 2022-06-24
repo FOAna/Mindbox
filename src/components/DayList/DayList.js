@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { useMemo } from 'react';
-import { useCallback } from 'react';
 import { useState, useEffect } from 'react';
-import DoneIcon from '../../icons/DoneIcon';
-import delIcon from '../../images/delete.svg';
+import Task from '../Task/Task';
 import delDone from '../../images/deleteDone.svg';
 
 import './DayList.css';
@@ -13,56 +11,10 @@ export const TaskStatus = { TODO: 'todo', DONE: 'done' };
 export default function DayList() {
   const url = 'http://localhost:3001/todos/';
   const date = new Date();
-  const days = [
-    'Воскресенье',
-    'Понедельник',
-    'Вторник',
-    'Среда',
-    'Четверг',
-    'Пятница',
-    'Суббота',
-  ];
 
   const [todo, setTodo] = useState([]);
   const [filter, setFilter] = useState('all');
   const [isDataChanged, setIsDataChanged] = useState(false);
-
-  const onBlurChange = useCallback(
-    (event, item) => {
-      if (event.target.value.length && event.target.value !== item.title) {
-        axios
-          .put(`${url}${item.id}`, {
-            id: item.id,
-            title: event.target.value,
-            status: item.status,
-          })
-          .then(setIsDataChanged(!isDataChanged));
-      }
-      event.target.value = '';
-    },
-    [isDataChanged]
-  );
-
-  const onClickDone = useCallback(
-    (item) => {
-      axios
-        .put(`${url}${item.id}`, {
-          id: item.id,
-          title: item.title,
-          status:
-            item.status === TaskStatus.TODO ? TaskStatus.DONE : TaskStatus.TODO,
-        })
-        .then(setIsDataChanged(!isDataChanged));
-    },
-    [isDataChanged]
-  );
-
-  const onClickDelete = useCallback(
-    (item) => {
-      axios.delete(`${url}${item.id}`).then(setIsDataChanged(!isDataChanged));
-    },
-    [isDataChanged]
-  );
 
   const getTodosFromResponse = useMemo(() => {
     return todo.map((item) => {
@@ -71,36 +23,16 @@ export default function DayList() {
           className={`DayList__listItem DayList__listItem_${item.status}`}
           key={item.id}
         >
-          <input
-            type='text'
-            placeholder={item.title}
-            onKeyDown={(event) => {
-              if (event.code === 'Enter') {
-                event.target.blur();
-              }
-            }}
-            onBlur={(event) => onBlurChange(event, item)}
+          <Task
+            url={url}
+            item={item}
+            isDataChanged={isDataChanged}
+            setIsDataChanged={setIsDataChanged}
           />
-          <div className='DayList__itemButtons'>
-            <div
-              className='DayList__iconWrapper'
-              onClick={() => onClickDone(item)}
-            >
-              <DoneIcon className='DayList__done' status={item.status} />
-            </div>
-            <img
-              className='DayList__delete'
-              src={delIcon}
-              onClick={() => onClickDelete(item)}
-              alt='Удалить'
-              width='19px'
-              height='20px'
-            />
-          </div>
         </li>
       );
     });
-  }, [todo, onBlurChange, onClickDone, onClickDelete]);
+  }, [todo, isDataChanged]);
 
   useEffect(() => {
     axios.get(url).then((response) => {
@@ -115,8 +47,18 @@ export default function DayList() {
   return (
     <div className='DayList'>
       <div className='DayList__header'>
-        <p className='DayList__date'>{date.toLocaleString().substring(0, 5)}</p>
-        <p className='DayList__weekday'>{days[date.getDay()]}</p>
+        {/* <p className='DayList__date'>{date.toLocaleString().substring(0, 5)}</p> */}
+        <p className='DayList__date'>
+          {date.toLocaleString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+          })}
+        </p>
+        <p className='DayList__weekday'>
+          {date.toLocaleString('ru-RU', {
+            weekday: 'long',
+          })}
+        </p>
       </div>
       <ul className='DayList__list'>
         {getTodosFromResponse}
@@ -198,14 +140,18 @@ export default function DayList() {
           alt='Удалить все завершённые'
           title='Удалить все завершённые дела'
           onClick={() => {
-            axios.get(url).then((response) => {
-              response.data
-                .filter((item) => item.status === 'done')
-                .forEach((element) => {
-                  axios.delete(`${url}${element.id}`);
-                });
-              setIsDataChanged(!isDataChanged);
-            });
+            axios
+              .get(url)
+              .then((response) => {
+                response.data
+                  .filter((item) => item.status === 'done')
+                  .forEach((element) => {
+                    axios.delete(`${url}${element.id}`);
+                  });
+              })
+              .then(() => {
+                setIsDataChanged(!isDataChanged);
+              });
           }}
         />
       </div>

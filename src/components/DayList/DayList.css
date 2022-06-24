@@ -26,15 +26,11 @@
   width: 100%;
   margin-bottom: 4px;
   border-bottom: 1px solid #bebebe;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 8px;
 }
 .DayList__listItem:hover {
   border-bottom-color: #6514b4;
 }
-.DayList__listItem input {
+.DayList__listItem_blank input {
   padding: 8px;
   border: none;
   font-size: 16px;
@@ -45,26 +41,8 @@
   box-shadow: 0 6px 4px -4px #6514b4;
   border-radius: 2px;
 }
-.DayList__listItem input::placeholder {
-  color: #000000;
-  font-size: 16px;
-}
-.DayList__listItem_done input::placeholder {
-  text-decoration: line-through;
-  color: gray;
-}
 .DayList__listItem_blank input::placeholder {
   color: #cfcfcf;
-}
-.DayList__listItem_done .DayList__done path {
-  fill: gray;
-}
-.DayList__done:hover,
-.DayList__delete:hover {
-  cursor: pointer;
-}
-.DayList__delete {
-  margin-left: 8px;
 }
 .DayList__filterRadio {
   display: inline-block;
@@ -103,7 +81,4 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.DayList__iconWrapper {
-  display: inline-block;
 }

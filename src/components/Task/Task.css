@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@200;400;500;600;700&display=swap');
+
+.Task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  list-style-type: none;
+  width: 100%;
+  margin-bottom: 4px;
+  padding-right: 8px;
+}
+.Task__title_done {
+  text-decoration: line-through;
+  color: gray;
+}
+.Task__doneIcon:hover,
+.Task__deleteIcon:hover {
+  cursor: pointer;
+}
+.Task__deleteIcon {
+  margin-left: 8px;
+}
+.Task__iconWrapper {
+  display: inline-block;
+}
+.Task__input,
+.Task__title {
+  padding: 8px;
+  border: none;
+  font-size: 16px;
+  font-family: 'Exo 2', sans-serif;
+  width: 80%;
+}
